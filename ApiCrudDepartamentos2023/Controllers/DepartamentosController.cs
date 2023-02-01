@@ -36,5 +36,37 @@ namespace ApiCrudDepartamentos2023.Controllers
             List<Departamento> departamentos = this.repo.FindLocalidad(localidad);
             return departamentos;
         }
+
+        //Vamos a tener dos metodos diferentes para Insertar
+        //1) En el primer método iran los valores por URL
+        [HttpPost]
+        [Route("[action]/{id}/{nombre}/{localidad}")]
+        public async Task InsertDepartamento(int id, string nombre, string localidad)
+        {
+            await this.repo.InsertDepartamentoAsync(id,nombre,localidad);
+        }
+
+        //2) La segunda forma recibirá el departamento por body con JSON.
+        //Este metodo es el que tiene por defecto cualquier controller para post, por lo que no hay que usar Route
+        [HttpPost]
+        public async Task InsertarDepartamento(Departamento dept)
+        {
+            await this.repo.InsertDepartamentoAsync(dept.IdDept,dept.Nombre,dept.Localidad);
+
+        }
+
+        //El metodo Put por defecto tambien recibe un objeto
+        [HttpPut]
+        public async Task UpdateDepartamento(Departamento dept)
+        {
+            await this.repo.UpdateDepartamentoAsync(dept);
+        }
+
+        //El metodo delete por defecto recibe un parametro por defecto {ID}
+        [HttpDelete("{id}")]
+        public async Task DeleteDepartamento(int id)
+        {
+            await this.repo.DeleteDepartamentoAsync(id);
+        }
     }
 }
